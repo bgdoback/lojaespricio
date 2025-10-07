@@ -16,7 +16,25 @@ const produtoModel = {
             console.error('Erro ao buscar produtos', error)
             throw error; //passa o erro para o controller tratar
         }
+    },
+    inserirProduto: async (nomeProduto, precoProduto) => {
+        try {
+
+            const pool = await getConnection();
+
+            let querysql = 'INSERT INTO Produtos(nomeProduto, precoProduto) VALUES(@nomeProduto, @precoProduto)';
+
+            await pool.request()
+            .input('nomeProduto', sql.VarChar(100), nomeProduto)
+            .input('precoProduto', sql.Decimal(10,2), precoProduto)
+            .query(querysql);
+
+        } catch (error) {
+            console.error('Erro ao inserir produto', error);
+            throw error; //Passa o erro para o controller tratar
+        }
+
     }
 }
 
-module.exports = {produtoModel}
+module.exports = { produtoModel }
